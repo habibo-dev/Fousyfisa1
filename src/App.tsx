@@ -1,80 +1,32 @@
-import { useEffect, useRef } from 'react';
-import { LangProvider } from './hooks/useLang';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import BookingWidget from './components/BookingWidget';
-import Services from './components/Services';
-import Packages from './components/Packages';
-import Destinations from './components/Destinations';
-import VisaSection from './components/VisaSection';
-import UmrahSection from './components/UmrahSection';
-import WhyChooseUs from './components/WhyChooseUs';
-import HowItWorks from './components/HowItWorks';
-import Testimonials from './components/Testimonials';
-import SocialSection from './components/SocialSection';
-import ContactSection from './components/ContactSection';
-import Footer from './components/Footer';
-import LegalPolicies from './components/LegalPolicies';
-import WhatsAppButton from './components/WhatsAppButton';
+import { useState } from 'react';
+import { ArrowLeft, ArrowUpLeft, CalendarDays, ChevronDown, Compass, Globe2, Menu, MessageCircle, Plane, X } from 'lucide-react';
 
-function AppContent() {
-  const mainRef = useRef<HTMLDivElement>(null);
+const images = {
+  hero:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1800&q=85',
+  istanbul:'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1000&q=85',
+  oman:'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=1000&q=85',
+  malaysia:'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1000&q=85',
+  umrah:'https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=1400&q=85',
+};
 
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      mainRef.current?.querySelectorAll('.reveal').forEach((element) => element.classList.add('visible'));
-      return;
-    }
-    // Intersection Observer for reveal animations
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    const el = mainRef.current;
-    if (el) {
-      const reveals = el.querySelectorAll('.reveal');
-      reveals.forEach((r) => observer.observe(r));
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={mainRef} className="overflow-x-hidden">
-      <Navbar />
-      <main>
-        <Hero />
-        <BookingWidget />
-        <div className="h-16 sm:h-20" /> {/* Spacer after booking widget */}
-        <Services />
-        <Packages />
-        <Destinations />
-        <VisaSection />
-        <UmrahSection />
-        <WhyChooseUs />
-        <HowItWorks />
-        <Testimonials />
-        <SocialSection />
-        <ContactSection />
-      </main>
-      <LegalPolicies />
-      <Footer />
-      <WhatsAppButton />
-    </div>
-  );
+function App(){
+ const [menu,setMenu]=useState(false);
+ const [sent,setSent]=useState(false);
+ return <div className="site">
+  <header className="nav"><a className="logo" href="#top"><span>الفسيفساء</span><small>للسياحة والأسفار</small></a><nav>{['الرحلات','الوجهات','الخدمات','العمرة','عن الفسيفساء'].map(x=><a href={'#'+x}>{x}</a>)}</nav><div className="nav-actions"><button className="lang">العربية <ChevronDown size={14}/></button><a className="nav-cta" href="#contact">ابدأ رحلتك <ArrowLeft size={16}/></a><button className="menu-btn" onClick={()=>setMenu(true)} aria-label="فتح القائمة"><Menu/></button></div></header>
+  {menu&&<div className="mobile-menu"><button className="close" onClick={()=>setMenu(false)}><X/></button><div className="menu-brand">الفسيفساء<small>TRAVEL & TOURISM</small></div>{['الرحلات','الوجهات','الخدمات','العمرة','عن الفسيفساء','اتصل بنا'].map(x=><a onClick={()=>setMenu(false)} href={'#'+x}>{x}<ArrowLeft size={17}/></a>)}<div className="menu-bottom"><span>العربية · Français · English</span><a className="whatsapp" href="https://wa.me/213000000000"><MessageCircle size={18}/> تحدث معنا عبر WhatsApp</a></div></div>}
+  <main id="top">
+   <section className="hero"><img src={images.hero} alt="منظر طبيعي لوجهة سفر ساحرة"/><div className="hero-shade"/><div className="hero-content"><p className="eyebrow">وكالة الفسيفساء للسياحة والأسفار <i/></p><h1>العالم أقرب<br/><em>مما تتخيّل</em></h1><p className="hero-copy">رحلات مصممة بعناية، وتجربة سفر تبدأ من أول لحظة.</p><div className="hero-buttons"><a className="btn light" href="#planner">اكتشف رحلتك <ArrowLeft size={18}/></a><a className="text-link" href="#destinations">استكشف الوجهات <ArrowLeft size={17}/></a></div></div><div className="hero-meta"><span>الجزائر <b>—</b> إلى العالم</span><span>01 <i/> 04</span></div><div className="scroll">مرّر لاكتشاف المزيد <span/></div></section>
+   <section className="planner" id="planner"><div className="section-kicker">خطوتك الأولى</div><h2>إلى أين تأخذك الرحلة القادمة؟</h2><div className="planner-card"><div className="field"><Globe2/><span>الوجهة<small>إلى أين تريد الذهاب؟</small></span><ChevronDown/></div><div className="field"><CalendarDays/><span>تاريخ السفر<small>اختر التاريخ</small></span></div><div className="field"><Compass/><span>نوع الرحلة<small>رحلة منظمة أو خاصة</small></span><ChevronDown/></div><button className="btn dark">ابدأ التخطيط <ArrowLeft size={18}/></button></div></section>
+   <section className="manifesto"><div className="manifesto-copy"><div className="section-kicker">فلسفتنا</div><h2>السفر بالنسبة لنا<br/><em>ليس مجرد حجز.</em></h2><p>إنها تجربة تبدأ قبل الإقلاع. نصغي لما تحلم به، ثم نحول التفاصيل الصغيرة إلى رحلة لا تُنسى.</p><a className="line-link" href="#about">اكتشف قصتنا <ArrowLeft size={17}/></a></div><div className="manifesto-image"><img src={images.oman} alt="شاطئ هادئ في عُمان"/><span>لحظات تستحق أن تُعاش</span></div></section>
+   <section className="journeys" id="الرحلات"><div className="section-head"><div><div className="section-kicker">اختياراتنا</div><h2>رحلات تستحق أن تُعاش</h2></div><a className="line-link" href="#contact">شاهد كل الرحلات <ArrowLeft size={17}/></a></div><div className="journey-grid"><article className="journey featured"><img src={images.istanbul} alt="إسطنبول، تركيا"/><div className="card-info"><span>تركيا · 5 أيام</span><h3>إسطنبول</h3><p>بين التاريخ، الثقافة والنكهات.</p><a href="#contact">اكتشف الرحلة <ArrowLeft size={16}/></a></div></article><article className="journey"><img src={images.malaysia} alt="كوالالمبور، ماليزيا"/><div className="card-info"><span>ماليزيا · 7 أيام</span><h3>كوالالمبور</h3><p>مدينة تنبض بالحياة والطبيعة.</p><a href="#contact">اكتشف الرحلة <ArrowLeft size={16}/></a></div></article><article className="journey sand"><div className="number">03</div><div className="card-info"><span>رحلات مصممة خصيصاً لك</span><h3>وجهتك القادمة</h3><p>أنت تختار الحلم، ونحن نهتم بالباقي.</p><a href="#contact">صمّم رحلتك <ArrowLeft size={16}/></a></div></article></div></section>
+   <section className="destinations" id="الوجهات"><div className="section-head"><div><div className="section-kicker">إلهام السفر</div><h2>اكتشف العالم</h2></div><p>وجهات مختارة بعناية<br/>لتناسب كل مزاج.</p></div><div className="destination-row"><div className="destination large"><img src={images.istanbul} alt="إسطنبول"/><span>01</span><div><small>تركيا</small><h3>إسطنبول</h3></div><ArrowUpLeft/></div><div className="destination"><img src={images.malaysia} alt="ماليزيا"/><span>02</span><div><small>آسيا</small><h3>ماليزيا</h3></div><ArrowUpLeft/></div><div className="destination"><img src={images.oman} alt="عُمان"/><span>03</span><div><small>الخليج</small><h3>عُمان</h3></div><ArrowUpLeft/></div></div></section>
+   <section className="services" id="الخدمات"><div className="section-kicker">بكل بساطة</div><h2>كل ما تحتاجه<br/><em>لرحلة بلا تعقيد</em></h2><div className="service-list">{['الرحلات المنظمة','حجوزات الطيران','الفنادق والإقامة','التأشيرات','الرحلات الخاصة'].map((x,i)=><a href="#contact"><span>0{i+1}</span><strong>{x}</strong><ArrowLeft size={18}/></a>)}</div></section>
+   <section className="umrah" id="العمرة"><div className="umrah-image"><img src={images.umrah} alt="المسجد الحرام في مكة المكرمة"/></div><div className="umrah-copy"><div className="section-kicker">رحلة بروح مختلفة</div><h2>إلى أطهر<br/><em>البقاع</em></h2><p>نعتني بتفاصيل الرحلة، لتتفرغ لروحانيتها.</p><div className="umrah-tags"><span>مكة</span><span>المدينة</span><span>الفنادق</span><span>النقل</span></div><a className="btn light" href="#contact">استكشف برامج العمرة <ArrowLeft size={17}/></a></div></section>
+   <section className="why" id="عن الفسيفساء"><div><div className="section-kicker">لماذا الفسيفساء؟</div><h2>نصنع تجربة سفر<br/><em>تبدأ قبل أن تقلع الطائرة.</em></h2></div><div className="principles">{[['01','عناية حقيقية','نسمعك جيداً ونبني حولك الرحلة.'],['02','وضوح من البداية','كل تفصيل واضح، بلا مفاجآت.'],['03','خدمة ترافقك','نحن هنا قبل السفر وأثناءه.']].map(x=><div><b>{x[0]}</b><h3>{x[1]}</h3><p>{x[2]}</p></div>)}</div></section>
+   <section className="process"><div className="section-kicker">بداية بسيطة</div><h2>رحلتك تبدأ من هنا</h2><div className="steps">{['اخبرنا بما تبحث عنه','نصمم لك الرحلة','نعتني بالتفاصيل','سافر واستمتع'].map((x,i)=><div><span>0{i+1}</span><strong>{x}</strong></div>)}</div></section>
+   <section className="contact" id="contact"><div className="contact-copy"><div className="section-kicker">على بُعد رسالة</div><h2>لنخطط لرحلتك<br/><em>القادمة.</em></h2><p>أخبرنا بما تبحث عنه، وسيتواصل معك فريق الفسيفساء.</p><a className="whatsapp" href="https://wa.me/213000000000"><MessageCircle size={19}/> تحدث معنا عبر WhatsApp</a></div><form onSubmit={e=>{e.preventDefault();setSent(true)}}>{sent?<div className="success">شكراً لك. سنعود إليك قريباً.</div>:<><label>الاسم<input required placeholder="كيف نناديك؟"/></label><label>رقم الهاتف<input required placeholder="+213"/></label><label>الوجهة<input placeholder="إلى أين؟"/></label><label>رسالتك<textarea placeholder="أخبرنا عن الرحلة التي تحلم بها"/></label><button className="btn dark">ابدأ التخطيط <ArrowLeft size={18}/></button></>}</form></section>
+  </main><footer><div className="footer-brand"><div className="logo">الفسيفساء<small>للسياحة والأسفار</small></div><p>نفتح لك أبواب العالم،<br/>بتفاصيل تشبهك.</p></div><div className="footer-links"><div><b>استكشف</b><a href="#الرحلات">الرحلات</a><a href="#الوجهات">الوجهات</a><a href="#الخدمات">الخدمات</a></div><div><b>تواصل</b><span>الجزائر</span><span>+213 000 000 000</span><span>hello@almosaïque.dz</span></div></div><div className="footer-bottom"><span>© 2026 الفسيفساء للسياحة والأسفار</span><span>العربية · Français · English</span></div></footer><a className="float-wa" href="https://wa.me/213000000000"><MessageCircle size={23}/></a>
+ </div>
 }
-
-export default function App() {
-  return (
-    <LangProvider>
-      <AppContent />
-    </LangProvider>
-  );
-}
+export default App;
